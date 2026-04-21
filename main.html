@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Happy Birthday, My Love 🎀</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --pink: #e8799a;
+    --pink-light: #f5c2d0;
+    --pink-pale: #fdf0f3;
+    --pink-soft: #f9d6e0;
+    --rose: #d45f7e;
+    --dark: #3a1f28;
+    --mid: #7a4558;
+    --cream: #fef9f5;
+    --gray: #b0a0a7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--dark);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ── STAR DECORATIONS ── */
+  .star-deco {
+    position: fixed;
+    opacity: 0.13;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .star-deco.tl { top: 60px; left: -30px; font-size: 120px; color: var(--pink); transform: rotate(-20deg); }
+  .star-deco.tr { top: 200px; right: -20px; font-size: 90px; color: var(--pink); transform: rotate(15deg); }
+  .star-deco.bl { bottom: 300px; left: -10px; font-size: 80px; color: var(--pink); transform: rotate(-10deg); }
+  .star-deco.br { bottom: 100px; right: -30px; font-size: 110px; color: var(--pink); transform: rotate(20deg); }
+
+  /* ── CONFETTI CANVAS ── */
+  #confetti-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* ── TOP BAR ── */
+  .top-bar {
+    background: var(--pink);
+    height: 10px;
+    width: 100%;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 48px 24px 32px;
+    position: relative;
+    z-index: 1;
+    animation: fadeDown 0.9s ease both;
+  }
+
+  /* ── CIRCLE PHOTO ── */
+  .hero-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 18px;
+    border: 3px solid var(--pink-light);
+    box-shadow: 0 4px 20px rgba(232,121,154,0.18);
+    background: linear-gradient(135deg, var(--pink-soft), var(--pink-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .hero-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .hero-avatar-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: var(--pink);
+    font-size: 11px;
+    font-family: 'DM Sans', sans-serif;
+    text-align: center;
+    line-height: 1.3;
+    padding: 8px;
+    opacity: 0.7;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 6vw, 46px);
+    font-weight: 600;
+    color: var(--mid);
+    line-height: 1.2;
+  }
+  .hero h1 span.pink { color: var(--pink); }
+  .hero h1 span.italic { font-style: italic; }
+
+  .hero-heart {
+    color: var(--pink);
+    font-size: 24px;
+    display: block;
+    margin: 14px 0 18px;
+    animation: heartbeat 1.4s infinite;
+  }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(14px, 3vw, 18px);
+    font-style: italic;
+    color: var(--mid);
+    line-height: 1.7;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+  .hero-subtitle .pink { color: var(--pink); }
+
+  /* ── QUOTE CARD ── */
+  .quote-card {
+    margin: 28px auto;
+    max-width: 680px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(232,121,154,0.10);
+    display: flex;
+    gap: 0;
+    overflow: hidden;
+    animation: fadeUp 1s 0.2s ease both;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quote-text {
+    padding: 32px 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .quote-big {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(15px, 3vw, 18px);
+    color: var(--pink);
+    line-height: 1.4;
+    margin-bottom: 18px;
+  }
+  .quote-big span { background: var(--pink-soft); padding: 1px 6px; border-radius: 4px; font-style: normal; font-weight: 600; }
+
+  .quote-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(14px, 2.5vw, 16px);
+    color: var(--mid);
+    line-height: 1.85;
+    font-style: italic;
+  }
+
+  .quote-footer {
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--gray);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .quote-footer span { color: var(--pink); }
+
+  .quote-photo {
+    width: 200px;
+    min-height: 240px;
+    background: linear-gradient(135deg, var(--pink-soft) 0%, var(--pink-light) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .quote-photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 12px);
+  }
+
+  /* ── NAV ── */
+  .nav-pills {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 10px 24px 28px;
+    animation: fadeUp 1s 0.35s ease both;
+    position: relative;
+    z-index: 1;
+  }
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    background: #fff;
+    border: 1.5px solid var(--pink-light);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--mid);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .pill:hover, .pill.active {
+    background: var(--pink);
+    color: #fff;
+    border-color: var(--pink);
+  }
+
+  /* ── TWO-COL SECTION ── */
+  .two-col {
+    display: flex;
+    gap: 20px;
+    max-width: 720px;
+    margin: 0 auto 28px;
+    padding: 0 20px;
+    animation: fadeUp 1s 0.45s ease both;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── PLAYLIST ── */
+  .playlist-card {
+    flex: 1;
+    background: #fff;
+    border-radius: 20px;
+    padding: 22px 20px;
+    box-shadow: 0 4px 20px rgba(232,121,154,0.08);
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 16px;
+  }
+  .section-title .heart { color: var(--pink); }
+
+  .song-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    border-left: 3px solid var(--pink);
+    background: var(--pink-pale);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .song-item:hover { background: var(--pink-soft); transform: translateX(3px); }
+  .song-name { font-size: 12px; font-weight: 600; color: var(--dark); }
+  .song-artist { font-size: 11px; color: var(--gray); }
+  .play-btn {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--pink);
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .play-btn:hover { transform: scale(1.15); }
+
+  /* ── POLAROID ── */
+  .polaroid-card {
+    width: 200px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .polaroid-title {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--pink);
+    text-align: center;
+  }
+  .polaroid-handle { font-size: 11px; color: var(--gray); text-align: center; }
+
+  .polaroid-stack {
+    position: relative;
+    height: 160px;
+  }
+  .polaroid-img {
+    position: absolute;
+    width: 120px;
+    background: #fff;
+    padding: 8px 8px 28px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+  }
+  .polaroid-img:nth-child(1) { top: 0; left: 10px; transform: rotate(-6deg); }
+  .polaroid-img:nth-child(2) { top: 20px; left: 55px; transform: rotate(4deg); z-index: 2; }
+
+  /* ── TICKER ── */
+  .ticker-wrap {
+    overflow: hidden;
+    background: var(--pink-soft);
+    padding: 12px 0;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+  }
+  .ticker-track {
+    display: flex;
+    gap: 0;
+    white-space: nowrap;
+    animation: ticker 20s linear infinite;
+    width: max-content;
+  }
+  .ticker-item {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--mid);
+    padding: 0 28px;
+  }
+  .ticker-dot { color: var(--pink); margin: 0 4px; }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 50px;
+    margin: 0 20px 28px;
+    padding: 6px 8px;
+    box-shadow: 0 2px 16px rgba(232,121,154,0.08);
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 1s 0.55s ease both;
+  }
+  .bottom-nav a {
+    padding: 8px 18px;
+    font-size: 13px;
+    color: var(--mid);
+    text-decoration: none;
+    border-radius: 40px;
+    transition: all 0.2s;
+  }
+  .bottom-nav a:hover { background: var(--pink-pale); }
+
+  /* ── GALLERY ── */
+  .gallery-section {
+    max-width: 720px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 1s 0.65s ease both;
+  }
+
+  .gallery-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .see-more {
+    font-size: 12px;
+    color: var(--pink);
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .see-more:hover { opacity: 0.7; }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .gallery-item {
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, var(--pink-soft), var(--pink-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(232,121,154,0.12);
+    cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .gallery-item:hover { transform: scale(1.04); box-shadow: 0 8px 28px rgba(232,121,154,0.22); }
+
+  .gallery-item img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:.4s;
+  }
+  
+  .gallery-item:hover img{
+    transform:scale(1.08);
+  }
+
+  .gift-label{
+    position:absolute;
+    bottom:8px;
+    left:8px;
+    right:8px;
+    background:rgba(255,255,255,.85);
+    padding:6px;
+    border-radius:10px;
+    font-size:12px;
+    text-align:center;
+    font-weight:600;
+  }
+
+  /* ── MESSAGE MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(58,31,40,0.45);
+    backdrop-filter: blur(6px);
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal-box {
+    background: #fff;
+    border-radius: 24px;
+    padding: 36px 32px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(232,121,154,0.25);
+    transform: translateY(30px) scale(0.96);
+    transition: transform 0.35s;
+    position: relative;
+  }
+  .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+  .modal-close {
+    position: absolute;
+    top: 14px; right: 18px;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--gray);
+    background: none; border: none;
+    transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--pink); }
+  .modal-emoji { font-size: 48px; margin-bottom: 14px; display: block; }
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 10px;
+  }
+  .modal-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--mid);
+    line-height: 1.7;
+  }
+  .modal-btn {
+    margin-top: 22px;
+    padding: 11px 30px;
+    background: var(--pink);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .modal-btn:hover { background: var(--rose); transform: scale(1.04); }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 16px;
+    font-size: 12px;
+    color: var(--gray);
+    position: relative;
+    z-index: 1;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+  }
+
+  .bottom-bar {
+    background: var(--pink);
+    height: 10px;
+    width: 100%;
+  }
+
+  /* ── JARS OF LOVE ── */
+
+.love-jars{
+    text-align:center;
+    margin:10px 24px 30px;
+    animation:fadeUp 1s .35s ease both;
+  }
+  
+  .jars-title{
+    font-family:'Playfair Display',serif;
+    font-size:22px;
+    color:var(--pink);
+    margin-bottom:20px;
+  }
+  
+  .jar-container{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    flex-wrap:wrap;
+  }
+  
+ /* individual jar */
+.love-jar{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    cursor:pointer;
+    transition:.35s;
+  }
+  
+  .love-jar:hover{
+    transform:translateY(-6px);
+  }
+  
+  /* lid */
+  .jar-lid{
+    width:64px;
+    height:14px;
+    background:linear-gradient(180deg,#ff9bb3,#e8799a);
+    border-radius:8px 8px 2px 2px;
+    position:relative;
+    z-index:2;
+  }
+  
+  /* glass body */
+  .jar-glass{
+    width:70px;
+    height:85px;
+    margin-top:-3px; /* locks lid to glass */
+    background:rgba(255,255,255,.6);
+    border:2px solid var(--pink-light);
+    border-radius:20px;
+    backdrop-filter:blur(6px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    box-shadow:
+      inset 0 0 12px rgba(255,255,255,.7),
+      0 6px 18px rgba(232,121,154,.18);
+    position:relative;
+  }
+  
+  /* glass shine */
+  .jar-glass::after{
+    content:'';
+    position:absolute;
+    left:10px;
+    top:10px;
+    width:12px;
+    height:40px;
+    background:rgba(255,255,255,.5);
+    border-radius:10px;
+  }
+  
+  /* label */
+  .love-jar p{
+    margin-top:8px;
+    font-size:13px;
+    color:var(--mid);
+    font-weight:500;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: none; } }
+  @keyframes fadeUp   { from { opacity: 0; transform: translateY(24px);  } to { opacity: 1; transform: none; } }
+  @keyframes heartbeat { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .quote-photo { display: none; }
+    .two-col { flex-direction: column; }
+    .polaroid-card { width: 100%; }
+    .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  }
+
+  /* ── MOBILE: JARS OF LOVE ── */
+@media (max-width:600px){
+
+    .jar-container{
+      gap:14px;
+      justify-content:center;
+    }
+  
+    .love-jar{
+      width:25%;
+      min-width:80px;
+    }
+  
+    .jar-glass{
+      width:60px;
+      height:75px;
+      font-size:24px;
+    }
+  
+    .jar-lid{
+      width:52px;
+    }
+  
+    .love-jar p{
+      font-size:12px;
+    }
+  
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Star decorations -->
+<div class="star-deco tl">★</div>
+<div class="star-deco tr">★</div>
+<div class="star-deco bl">★</div>
+<div class="star-deco br">★</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <span class="modal-emoji" id="modal-emoji">🎂</span>
+    <div class="modal-title" id="modal-title">Happy Birthday!</div>
+    <div class="modal-body" id="modal-body">You make every day feel like a celebration.</div>
+    <button class="modal-btn" onclick="closeModal()">Aww, thank you 💕</button>
+  </div>
+</div>
+
+<div class="top-bar"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <!-- CIRCLE PHOTO: replace the placeholder div with <img src="https://i.pinimg.com/736x/94/e7/02/94e702d3e485a3d878f3999547054f51.jpg" alt="My love"> inside .hero-avatar -->
+  <div class="hero-avatar">
+    <img src="https://i.pinimg.com/736x/94/e7/02/94e702d3e485a3d878f3999547054f51.jpg" alt="My love">3
+    </div>
+  </div>
+  <h1>
+    <span class="italic pink">Happy Birthday</span><br>
+    to <span class="pink">My Favorite Person</span>
+  </h1>
+  <span class="hero-heart">♥</span>
+  <p class="hero-subtitle">
+    And isn't it just <span class="pink">so wonderful</span> to think —<br>
+    all along, there was some <span class="pink">invisible string</span> tying you to me.
+  </p>
+</section>
+
+<!-- QUOTE CARD -->
+<div class="quote-card" style="margin-left:20px;margin-right:20px;">
+  <div class="quote-text">
+    <div class="quote-big">
+      It's gonna take me a minute, but I could get<br>
+      <span>[ USED TO THIS ]</span>
+    </div>
+    <div class="quote-body">
+      It's the strangest feeling —<br>
+      on your birthday, I'm not leaving,<br>
+      for once I think I'll stay forever.<br><br>
+      I'll say your name, just listen,<br>
+      Doesn't it sound different?<br>
+      Never whispered it with this much love.
+    </div>
+    <div class="quote-footer">
+      love of <span>♥</span> my life
+    </div>
+  </div>
+  <div class="quote-photo">🎂</div>
+</div>
+
+<!-- JARS OF LOVE -->
+<section class="love-jars">
+
+    <h2 class="jars-title">Jars of Love 💌</h2>
+  
+    <div class="jar-container">
+  
+      <div class="love-jar"
+      onclick="showModal(
+        '💖',
+        'I Appreciate You',
+        'Just having you in my life makes everything better. You are genuinely special to me.'
+        )">
+        <div class="jar-lid"></div>
+        <div class="jar-glass">
+        </div>
+        <p>Baby</p>
+      </div>
+  
+      <div class="love-jar"
+      onclick="showModal(
+        '🌸',
+        'Your Kindness',
+        'I love how kind and gentle your heart is, even in the smallest things you do.'
+        )">
+        <div class="jar-lid"></div>
+        <div class="jar-glass">
+        </div>
+        <p>Love</p>
+      </div>
+
+  
+      <div class="love-jar"
+      onclick="showModal(
+        '😊',
+        'Your Smile',
+        'Your smile is my favorite thing. It makes everything feel lighter and happier.'
+        )">
+        <div class="jar-lid"></div>
+        <div class="jar-glass">
+        </div>
+        <p>You</p>
+      </div>
+  
+    </div>
+  </section>
+
+<!-- TWO-COL: PLAYLIST + POLAROIDS -->
+<div class="two-col">
+  <!-- PLAYLIST -->
+  <div class="playlist-card">
+    <div class="section-title"><span class="heart">♥</span> Our Playlist</div>
+
+    <div class="song-item"
+onclick="showModal('🎵','Perfect – Ed Sheeran',`I found a love for me... darling just dive right in, follow my lead. This is us. 💞`)">
+      <div>
+        <div class="song-name">PERFECT</div>
+        <div class="song-artist">by Ed Sheeran</div>
+      </div>
+      <button class="play-btn">▶</button>
+    </div>
+
+    <div class="song-item" onclick="showModal('🎵','Lover – Taylor Swift','Every day is golden just because you\'re in it. Happy birthday, my lover. 🌻')">
+      <div>
+        <div class="song-name">LOVER</div>
+        <div class="song-artist">by Taylor Swift</div>
+      </div>
+      <button class="play-btn">▶</button>
+    </div>
+
+    <div class="song-item"
+    onclick="showModal('🎵','All of Me – John Legend',`All of me loves all of you. Every single part. Happy birthday, beautiful. 🌹`)">
+      <div>
+        <div class="song-name">ALL OF ME</div>
+        <div class="song-artist">by John Legend</div>
+      </div>
+      <button class="play-btn">▶</button>
+    </div>
+
+    <div class="song-item" onclick="showModal('🎵','Birthday – Katy Perry','Because you deserve the world on your special day! 🎉🎂 Happy Birthday!')">
+      <div>
+        <div class="song-name">BIRTHDAY</div>
+        <div class="song-artist">by Katy Perry</div>
+      </div>
+      <button class="play-btn">▶</button>
+    </div>
+  </div>
+
+  <!-- POLAROIDS -->
+  <div class="polaroid-card">
+    <div class="polaroid-title">The love of my life</div>
+    <div class="polaroid-handle">your name & mine, forever</div>
+    <div class="polaroid-stack">
+      <div class="polaroid-img">📸</div>
+      <div class="polaroid-img">🌸</div>
+    </div>
+    <div style="text-align:center;margin-top:8px;">
+      <a href="#" onclick="showModal('📸','Our Memories','Every photo with you is my favorite photo. You make even ordinary moments look extraordinary. 💕')" style="font-size:12px;color:var(--pink);text-decoration:none;">→ see more</a>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item">lover of mine <span class="ticker-dot">♥</span></span>
+    <span class="ticker-item">happy birthday, my love <span class="ticker-dot">🎀</span></span>
+    <span class="ticker-item">you mean the world to me <span class="ticker-dot">♥</span></span>
+    <span class="ticker-item">my favorite person always <span class="ticker-dot">🌸</span></span>
+    <span class="ticker-item">forever and always yours <span class="ticker-dot">♥</span></span>
+    <span class="ticker-item">lover of mine <span class="ticker-dot">♥</span></span>
+    <span class="ticker-item">happy birthday, my love <span class="ticker-dot">🎀</span></span>
+    <span class="ticker-item">you mean the world to me <span class="ticker-dot">♥</span></span>
+    <span class="ticker-item">my favorite person always <span class="ticker-dot">🌸</span></span>
+    <span class="ticker-item">forever and always yours <span class="ticker-dot">♥</span></span>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a href="#" onclick="showModal('🏠','Home','You are my home. 🏡')">Home ∨</a>
+  <a href="#" onclick="showModal('📷','Photos','Every photo with you is my favorite. 📷💕')">Photo ∨</a>
+  <a href="#" onclick="showModal('🖼️','Gallery','Our little gallery of beautiful moments. 🖼️')">Gallery ∨</a>
+  <a href="#" onclick="showModal('💌','Contact','You always have my heart. Just text me — always. 💌')">Contact ∨</a>
+  <a href="#" onclick="showModal('✨','More','There\'s always more love where that came from. ✨')">Other ∨</a>
+</nav>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+  <div class="gallery-header">
+    <div class="section-title"><span class="heart">♥</span> Open when you're feeling...</div>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item"
+onclick="showModal('Open when you feel sad','Even on your hardest days, remember you are loved more than words can explain. 💕')">
+  <img src="https://i.pinimg.com/1200x/5c/ba/f5/5cbaf50a51fb25a8d06958ae2884c575.jpg">
+  <span class="gift-label">Open Me</span>
+</div>
+
+<div class="gallery-item"
+onclick="showModal('A Birthday Hug','If I could, I would hug you right now. Happy Birthday, my love. 🤍')">
+  <img src="https://i.pinimg.com/736x/bb/87/11/bb871188b8e795fbdbf8a3322af48a27.jpg">
+  <span class="gift-label">Open Me</span>
+</div>
+
+<div class="gallery-item"
+onclick="showModal('For When You Miss Me','Every memory we make is my favorite gift. 💌')">
+  <img src="https://i.pinimg.com/736x/c6/8d/2f/c68d2f4dba63e4fc21920a162aa2824e.jpg">
+  <span class="gift-label">Open Me</span>
+</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="footer">Made with so much love, just for you 💕</div>
+<div class="bottom-bar"></div>
+
+<script>
+  // ── MODAL ──
+  function showModal(emoji, title, body) {
+    document.getElementById('modal-emoji').textContent = emoji;
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-body').textContent = body;
+    document.getElementById('modal').classList.add('open');
+    return false;
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  // ── CONFETTI ──
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+  const COLORS = ['#e8799a','#f5c2d0','#d45f7e','#fdf0f3','#ffb3c6','#fff0f5'];
+  const SHAPES = ['♥','★','●','■'];
+
+  let particles = [];
+  function spawnBurst(x, y, count = 18) {
+    for (let i = 0; i < count; i++) {
+      const angle = (Math.PI * 2 / count) * i + Math.random() * 0.4;
+      const speed = 2 + Math.random() * 4;
+      particles.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 2,
+        alpha: 1,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
+        size: 10 + Math.random() * 12,
+        rot: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.15,
+      });
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles = particles.filter(p => p.alpha > 0.01);
+    for (const p of particles) {
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.font = `${p.size}px serif`;
+      ctx.fillStyle = p.color;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(p.shape, 0, 0);
+      ctx.restore();
+
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.06;
+      p.rot += p.rotSpeed;
+      p.alpha -= 0.016;
+    }
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  // Initial big burst on load
+  setTimeout(() => {
+    spawnBurst(window.innerWidth / 2, window.innerHeight / 2, 40);
+    spawnBurst(window.innerWidth * 0.2, window.innerHeight * 0.3, 20);
+    spawnBurst(window.innerWidth * 0.8, window.innerHeight * 0.3, 20);
+  }, 400);
+
+  // Burst on click
+  document.addEventListener('click', e => {
+    if (e.target.id !== 'confetti-canvas') {
+      spawnBurst(e.clientX, e.clientY, 14);
+    }
+  });
+</script>
+</body>
+</html>

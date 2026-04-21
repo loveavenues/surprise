@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday!</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #ffebd0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scene-wrapper {
+      background: #ffebd0;
+      min-height: 340px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 20px 10px 0;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .scene {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 25px;
+      background: #fff;
+      z-index: 20;
+    }
+
+    /* ===== CAKE ===== */
+    .cake {
+      position: relative;
+      width: 280px;
+      height: 220px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .cake {
+        width: 200px;
+        height: 165px;
+        transform-origin: bottom center;
+        transform: scale(0.85);
+      }
+    }
+
+    @media (max-width: 380px) {
+      .cake {
+        width: 170px;
+        height: 140px;
+        transform: scale(0.72);
+      }
+    }
+
+    .cake_bottom {
+      position: absolute;
+      width: 100%;
+      height: 5px;
+      bottom: 0;
+      background: #9dc5c4;
+      border-top: 2px solid #e6e7e9;
+    }
+
+    .cake_bottom2 {
+      position: absolute;
+      width: calc(100% - 10px);
+      bottom: 7px;
+      background: #cd7a1c;
+      height: 22px;
+      right: 5px;
+      left: 5px;
+      border-radius: 3px 3px 0 0;
+      box-shadow: -50% 0 0 #ad631c inset;
+    }
+
+    .cake_bottom3 {
+      box-shadow: 0 -3px 0 #fddbea, -50% 0 0 #5a4027 inset;
+      height: 52px;
+      border-top: 5px solid #ff7ebe;
+      background: #744c28;
+      position: absolute;
+      width: calc(100% - 20px);
+      bottom: 29px;
+      right: 10px;
+      left: 10px;
+      border-radius: 5px 5px 0 0;
+    }
+
+    .cake_top1 {
+      box-shadow: -50% 0 0 #ff9201 inset;
+      height: 46px;
+      background: #ffb009;
+      position: absolute;
+      width: 68%;
+      bottom: 89px;
+      right: 16%;
+      left: 16%;
+      border-radius: 5px 5px 0 0;
+      border-bottom: 3px solid #c14500;
+    }
+
+    .cake_top2 {
+      box-shadow: -50% 0 0 #5b3f29 inset;
+      height: 52px;
+      background: #744c28;
+      position: absolute;
+      width: 42%;
+      bottom: 138px;
+      border-radius: 5px 5px 0 0;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+    }
+
+    .cake_top1_creams {
+      height: 18px;
+      border-radius: 5px;
+      background: #f24282;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+
+    .cake_top1_cream {
+      position: absolute;
+      border-radius: 9px;
+    }
+
+    .cake_bottom3_creams {
+      height: 22px;
+      border-radius: 5px;
+      background: #ff7fbf;
+      position: absolute;
+      top: -5px;
+      width: 100%;
+    }
+
+    .cake_bottom1_creams {
+      height: 10px;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .cherry {
+      width: 13px;
+      top: -13px;
+      height: 13px;
+      border-radius: 100%;
+      background: #fff;
+      position: absolute;
+      box-shadow: -2px -1px 0 5px #ff4d59 inset;
+    }
+
+    #cherry1 { left: 8%; }
+    #cherry2 { left: 26%; }
+    #cherry3 { left: 44%; }
+    #cherry4 { right: 26%; }
+    #cherry5 { right: 8%; }
+
+    .cake_circle {
+      height: 50px;
+      width: 50px;
+      border-radius: 100%;
+      box-shadow: 0 0 0 11px #ffebc8 inset;
+      top: -27px;
+      z-index: 100;
+      position: absolute;
+    }
+
+    .circles {
+      position: absolute;
+      height: 27px;
+      width: 100%;
+      overflow: hidden;
+      top: 0;
+    }
+
+    #circle1 { left: -1px; }
+    #circle2 { left: 20%; }
+    #circle3 { left: 40%; }
+    #circle4 { right: 20%; }
+    #circle5 { right: -1px; }
+
+    .one_number {
+      position: absolute;
+      left: 40%;
+      top: 18px;
+      width: 9px;
+    }
+
+    .one_number:after {
+      content: "";
+      height: 5px;
+      width: 5px;
+      position: absolute;
+      background: #c6c6c6;
+      top: 0;
+      left: 0;
+    }
+
+    .one_number:before {
+      content: "";
+      height: 25px;
+      width: 5px;
+      position: absolute;
+      background: #c6c6c6;
+      top: 0;
+      right: 0;
+    }
+
+    .seven_number {
+      position: absolute;
+      right: 38%;
+      top: 18px;
+      width: 14px;
+    }
+
+    .seven_number:after {
+      content: "";
+      height: 5px;
+      width: 20px;
+      position: absolute;
+      background: #c6c6c6;
+      top: 0;
+      left: -2px;
+    }
+
+    .seven_number:before {
+      content: "";
+      height: 27px;
+      width: 5px;
+      position: absolute;
+      background: #c6c6c6;
+      top: 0;
+      right: 0;
+      transform: rotate(20deg);
+    }
+
+    .seven_flame,
+    .one_flame {
+      height: 12px;
+      width: 6px;
+      border-radius: 100%;
+      background: #ffd215;
+      position: absolute;
+      right: 1px;
+      bottom: 2px;
+      animation: flame 0.5s infinite linear;
+    }
+
+    .seven_flame { right: 3px; }
+
+    @keyframes flame {
+      0%   { height: 12px; background: #fdd214; }
+      50%  { height: 14px; background: #ffc617; }
+      100% { height: 12px; background: #fdd214; }
+    }
+
+    /* ===== GIFT ===== */
+    .gift {
+      position: relative;
+      width: 130px;
+      height: 160px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .gift {
+        width: 100px;
+        height: 130px;
+        transform-origin: bottom center;
+        transform: scale(0.85);
+      }
+    }
+
+    @media (max-width: 380px) {
+      .gift {
+        width: 85px;
+        height: 110px;
+        transform: scale(0.72);
+      }
+    }
+
+    .giftcard {
+      border-radius: 5px;
+      background: #fff;
+      box-shadow: 0 1px 0 1px #fee4c0;
+      padding: 8px;
+      width: 72px;
+      font-size: 13px;
+      font-family: 'Source Sans Pro', sans-serif;
+      color: #ff3f48;
+      left: 0;
+      top: 80px;
+      right: 0;
+      margin: 0 auto;
+      position: absolute;
+      line-height: 22px;
+      z-index: -1;
+      text-align: center;
+      transition: all 0.6s ease-in-out 0.5s;
+    }
+
+    .ribbon_right {
+      width: 38px;
+      height: 38px;
+      border-radius: 100% 100% 100% 0;
+      box-shadow: 0 0 0 9px #1495f1 inset;
+      position: absolute;
+      right: 16px;
+    }
+
+    .ribbon_left {
+      width: 38px;
+      height: 38px;
+      border-radius: 100% 100% 0 100%;
+      box-shadow: 0 0 0 9px #1aa8fc inset;
+      position: absolute;
+      left: 16px;
+    }
+
+    .gift_box_top {
+      height: 26px;
+      top: 38px;
+      position: absolute;
+      width: 130px;
+      background: #ff7d6d;
+      box-shadow: -65px 0 0 #ff6259 inset;
+    }
+
+    .gift_ribbon_center {
+      width: 2px;
+      bottom: 0;
+      position: absolute;
+      right: 0;
+      left: 0;
+      margin: 0 auto;
+      background: #1cadfe;
+      height: 128px;
+      border-right: 5px solid #28C9FF;
+      border-left: 5px solid #28C9FF;
+      z-index: 10;
+      transition: all 0.3s ease-in-out 1s;
+    }
+
+    .gift_box_bottom_top {
+      height: 5px;
+      width: calc(100% - 14px);
+      right: 7px;
+      position: absolute;
+      bottom: 94px;
+      background: #dd4b4c;
+      transition: all 0.3s ease-in-out 1.1s;
+    }
+
+    .gift_ribbon_left {
+      height: 50px;
+      width: 14px;
+      left: 12px;
+      position: absolute;
+      background: #28c9ff;
+      top: 35px;
+      z-index: 11;
+      transition: all 0.3s ease-in-out 1s;
+    }
+
+
+    .gift_ribbon_left:after {
+      border-width: 8px;
+      border-style: solid;
+      border-color: transparent;
+      border-bottom-color: #ff8168;
+      z-index: 12;
+      position: absolute;
+      content: "";
+      bottom: 0;
+    }
+
+    .gift_box_bottom {
+      background: #ff8168;
+      bottom: 0;
+      height: 94px;
+      overflow: hidden;
+      right: 7px;
+      position: absolute;
+      width: calc(100% - 14px);
+      box-shadow: -50% 0 0 #fe6d68 inset;
+    }
+
+    .gift_box_bottom_ribbon {
+      position: absolute;
+      right: -20px;
+      height: 11px;
+      width: 95px;
+      transform: rotate(45deg);
+      background: #ff4149;
+    }
+
+    #ribbon1 { top: -14px; }
+    #ribbon2 { top: 18px; }
+    #ribbon3 { top: 50px; }
+    #ribbon4 { top: 82px; }
+
+    .hint-text {
+        position: absolute;
+        bottom: 200px; /* sits above the white line */
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 13px;
+        font-family: Arial, sans-serif;
+        color: #c06c84;
+        background: rgba(255,255,255,0.7);
+        padding: 6px 12px;
+        border-radius: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        z-index: 30;
+        animation: floatHint 2.5s ease-in-out infinite;
+      }
+
+      @keyframes floatHint {
+        0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.9; }
+        50% { transform: translateX(-50%) translateY(-4px); opacity: 1; }
+      }
+  </style>
+</head>
+<body>
+
+  <div class="scene-wrapper">
+    <div class="scene">
+
+      <!-- GIFT BOX -->
+      <section class="gift" id="giftBox">
+        <div class="giftcard">Happy<br/>Birthday!</div>
+        <section class="gift_top">
+          <div class="ribbon_right"></div>
+          <div class="ribbon_left"></div>
+          <div class="gift_box_top"></div>
+          <div class="gift_ribbon_left"></div>
+        </section>
+        <div class="gift_ribbon_center"></div>
+        <div class="gift_box_bottom_top"></div>
+        <div class="gift_box_bottom">
+          <div class="gift_box_bottom_ribbon" id="ribbon1"></div>
+          <div class="gift_box_bottom_ribbon" id="ribbon2"></div>
+          <div class="gift_box_bottom_ribbon" id="ribbon3"></div>
+          <div class="gift_box_bottom_ribbon" id="ribbon4"></div>
+        </div>
+      </section>
+
+      <!-- CAKE -->
+      <section class="cake" onclick="window.location.href='main.html'">
+        <div class="one_number"><div class="one_flame"></div></div>
+        <div class="seven_number"><div class="seven_flame"></div></div>
+
+        <section class="cake_top2">
+          <section class="cake_top1_creams">
+            <div class="cake_top1_cream" style="left:-3px;height:25px;width:15px;background:#f14380;"></div>
+            <div class="cake_top1_cream" style="left:12px;height:25px;width:10px;background:#744c28;top:10px;"></div>
+            <div class="cake_top1_cream" style="left:22px;height:23px;width:10px;background:#f14380;"></div>
+            <div class="cake_top1_cream" style="left:32px;height:25px;width:12px;background:#744c28;top:13px;"></div>
+            <div class="cake_top1_cream" style="left:44px;height:30px;width:13px;background:#f14380;"></div>
+            <div class="cake_top1_cream" style="right:5px;height:22px;width:8px;background:#f14380;"></div>
+            <div class="cake_top1_cream" style="right:15px;height:31px;width:10px;background:#f14380;"></div>
+            <div class="cake_top1_cream" style="right:35px;height:24px;width:13px;background:#f14380;"></div>
+          </section>
+        </section>
+
+        <section class="cake_top1">
+          <div class="cherry" id="cherry1"></div>
+          <div class="cherry" id="cherry2"></div>
+          <div class="cherry" id="cherry3"></div>
+          <div class="cherry" id="cherry4"></div>
+          <div class="cherry" id="cherry5"></div>
+          <section class="circles">
+            <div class="cake_circle" id="circle1"></div>
+            <div class="cake_circle" id="circle2"></div>
+            <div class="cake_circle" id="circle3"></div>
+            <div class="cake_circle" id="circle4"></div>
+            <div class="cake_circle" id="circle5"></div>
+          </section>
+        </section>
+
+        <section class="cake_bottom3">
+          <section class="cake_bottom3_creams">
+            <div class="cake_top1_cream" style="left:-3px;height:35px;width:18px;background:#ff7fbf;"></div>
+            <div class="cake_top1_cream" style="left:15px;height:24px;width:15px;top:12px;background:#744c28;"></div>
+            <div class="cake_top1_cream" style="left:30px;height:38px;width:10px;background:#ff7fbf;"></div>
+            <div class="cake_top1_cream" style="left:55px;height:30px;width:15px;background:#ff7fbf;"></div>
+            <div class="cake_top1_cream" style="left:82px;height:40px;width:18px;background:#ff7fbf;"></div>
+            <div class="cake_top1_cream" style="right:58px;height:30px;width:12px;background:#ff7fbf;"></div>
+            <div class="cake_top1_cream" style="right:28px;height:38px;width:15px;background:#ff7fbf;"></div>
+            <div class="cake_top1_cream" style="right:-3px;height:30px;width:13px;background:#ff7fbf;"></div>
+          </section>
+        </section>
+
+        <section class="cake_bottom2">
+          <section class="cake_bottom1_creams">
+            <div class="cake_top1_cream" style="left:20%;height:6px;width:14px;background:#5a4027;bottom:0;border-radius:20px 20px 0 0;position:absolute;"></div>
+            <div class="cake_top1_cream" style="right:15%;height:8px;width:14px;background:#744c29;bottom:0;border-radius:20px 20px 0 0;position:absolute;"></div>
+          </section>
+        </section>
+
+        <div class="cake_bottom"></div>
+      </section>
+
+      <div class="hint-text">clue: click on the top layer cake</div>
+
+      <div class="line"></div>
+    </div>
+  </div>
+
+  <script>
+    function goToMain() {
+        window.location.href = "main.html";
+      }
+  </script>
+
+</body>
+</html>
