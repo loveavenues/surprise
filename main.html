@@ -86,20 +86,6 @@
     object-fit: cover;
     display: block;
   }
-  .hero-avatar-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    color: var(--pink);
-    font-size: 11px;
-    font-family: 'DM Sans', sans-serif;
-    text-align: center;
-    line-height: 1.3;
-    padding: 8px;
-    opacity: 0.7;
-  }
 
   .hero h1 {
     font-family: 'Playfair Display', serif;
@@ -181,23 +167,110 @@
   }
   .quote-footer span { color: var(--pink); }
 
+  /* ── QUOTE PHOTO WITH SURPRISE REVEAL ── */
   .quote-photo {
     width: 200px;
-    min-height: 240px;
-    background: linear-gradient(135deg, var(--pink-soft) 0%, var(--pink-light) 100%);
+    padding: 12px;
+    background: #fff;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .quote-photo img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    display: block;
+    transition: filter 0.8s ease, transform 0.6s ease;
+  }
+
+  .quote-photo img.blurred {
+    filter: blur(12px) brightness(0.9) saturate(0.7);
+    transform: scale(1.04);
+  }
+
+  .quote-photo img.revealed {
+    filter: blur(0px) brightness(1) saturate(1);
+    transform: scale(1);
+  }
+
+  /* overlay sits on top of blurred image */
+  .blur-overlay {
+    position: absolute;
+    inset: 12px;
+    border-radius: 12px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    font-size: 64px;
-    position: relative;
-    overflow: hidden;
+    gap: 10px;
+    z-index: 3;
+    transition: opacity 0.5s ease;
+    pointer-events: none; /* clicks pass through to the .quote-photo wrapper */
+    background: rgba(253, 240, 243, 0.15);
   }
-  .quote-photo::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 12px);
+
+  .blur-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .click-emoji {
+    font-size: 30px;
+    animation: bounce-emoji 1.3s ease-in-out infinite;
+    filter: drop-shadow(0 2px 6px rgba(232,121,154,0.4));
+  }
+
+  .click-note {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1.5px solid var(--pink-light);
+    border-radius: 50px;
+    padding: 7px 16px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    color: var(--pink);
+    box-shadow: 0 4px 18px rgba(232,121,154,0.3);
+    animation: pulse-note 1.5s ease-in-out infinite;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── SURPRISE TOAST ── */
+  .surprise-toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--pink);
+    color: #fff;
+    border-radius: 50px;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    box-shadow: 0 8px 30px rgba(232,121,154,0.45);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .surprise-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  @keyframes pulse-note {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 18px rgba(232,121,154,0.3); }
+    50% { transform: scale(1.07); box-shadow: 0 6px 24px rgba(232,121,154,0.5); }
+  }
+
+  @keyframes bounce-emoji {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-8px) rotate(5deg); }
   }
 
   /* ── NAV ── */
@@ -293,13 +366,14 @@
   }
   .play-btn:hover { transform: scale(1.15); }
 
-  /* ── POLAROID ── */
+  /* ── POLAROID SLIDESHOW ── */
   .polaroid-card {
     width: 200px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    align-items: center;
+    gap: 10px;
   }
 
   .polaroid-title {
@@ -311,24 +385,79 @@
   }
   .polaroid-handle { font-size: 11px; color: var(--gray); text-align: center; }
 
-  .polaroid-stack {
-    position: relative;
-    height: 160px;
-  }
-  .polaroid-img {
-    position: absolute;
-    width: 120px;
-    background: #fff;
-    padding: 8px 8px 28px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.10);
-    border-radius: 4px;
+  .polaroid-slideshow {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    font-size: 32px;
+    gap: 10px;
+    width: 100%;
   }
-  .polaroid-img:nth-child(1) { top: 0; left: 10px; transform: rotate(-6deg); }
-  .polaroid-img:nth-child(2) { top: 20px; left: 55px; transform: rotate(4deg); z-index: 2; }
+
+  .polaroid-frame {
+    background: #fff;
+    padding: 8px 8px 32px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+    border-radius: 3px;
+    width: 170px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: polaroid-sway 6s ease-in-out infinite;
+    position: relative;
+  }
+
+  .polaroid-frame:hover {
+    transform: scale(1.04) rotate(0deg) !important;
+    box-shadow: 0 10px 32px rgba(232,121,154,0.28);
+    animation: none;
+  }
+
+  @keyframes polaroid-sway {
+    0%,100% { transform: rotate(-2deg); }
+    50%      { transform: rotate(2deg); }
+  }
+
+  .polaroid-frame img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    border-radius: 1px;
+    transition: opacity 0.4s ease;
+  }
+
+  .polaroid-frame img.fade-out { opacity: 0; }
+  .polaroid-frame img.fade-in  { opacity: 1; }
+
+  .polaroid-caption {
+    position: absolute;
+    bottom: 6px;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--mid);
+  }
+
+  .polaroid-dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .pdot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--pink-light);
+    transition: background 0.3s, transform 0.3s;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  .pdot.active {
+    background: var(--pink);
+    transform: scale(1.3);
+  }
 
   /* ── TICKER ── */
   .ticker-wrap {
@@ -541,8 +670,7 @@
   }
 
   /* ── JARS OF LOVE ── */
-
-.love-jars{
+  .love-jars{
     text-align:center;
     margin:10px 24px 30px;
     animation:fadeUp 1s .35s ease both;
@@ -562,8 +690,7 @@
     flex-wrap:wrap;
   }
   
- /* individual jar */
-.love-jar{
+  .love-jar{
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -575,7 +702,6 @@
     transform:translateY(-6px);
   }
   
-  /* lid */
   .jar-lid{
     width:64px;
     height:14px;
@@ -585,11 +711,10 @@
     z-index:2;
   }
   
-  /* glass body */
   .jar-glass{
     width:70px;
     height:85px;
-    margin-top:-3px; /* locks lid to glass */
+    margin-top:-3px;
     background:rgba(255,255,255,.6);
     border:2px solid var(--pink-light);
     border-radius:20px;
@@ -604,7 +729,6 @@
     position:relative;
   }
   
-  /* glass shine */
   .jar-glass::after{
     content:'';
     position:absolute;
@@ -616,7 +740,6 @@
     border-radius:10px;
   }
   
-  /* label */
   .love-jar p{
     margin-top:8px;
     font-size:13px;
@@ -632,44 +755,28 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 600px) {
-    .quote-photo { display: none; }
-    .two-col { flex-direction: column; }
-    .polaroid-card { width: 100%; }
+    .two-col { flex-direction: column; align-items: center; }
+    .polaroid-card { width: 100%; align-items: center; }
+    .polaroid-frame { width: min(220px, 70vw); }
     .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  }
 
-  /* ── MOBILE: JARS OF LOVE ── */
-@media (max-width:600px){
+    .jar-container{ gap:14px; justify-content:center; }
+    .love-jar{ width:25%; min-width:80px; }
+    .jar-glass{ width:60px; height:75px; font-size:24px; }
+    .jar-lid{ width:52px; }
+    .love-jar p{ font-size:12px; }
 
-    .jar-container{
-      gap:14px;
-      justify-content:center;
-    }
-  
-    .love-jar{
-      width:25%;
-      min-width:80px;
-    }
-  
-    .jar-glass{
-      width:60px;
-      height:75px;
-      font-size:24px;
-    }
-  
-    .jar-lid{
-      width:52px;
-    }
-  
-    .love-jar p{
-      font-size:12px;
-    }
-  
+    .quote-card{ flex-direction:column; }
+    .quote-photo{ width:100%; height:auto; padding:12px; }
+    .quote-photo img{ width:100%; height:auto; object-fit:contain; }
+    .quote-text{ padding:24px 20px; }
   }
 </style>
 </head>
 <body>
 
+<!-- Happy Birthday audio -->
+<audio id="bday-audio" src="./extra/Happy Birthday To You! (Traditional) First Time on YouTube.mp3" preload="auto"></audio>
 <canvas id="confetti-canvas"></canvas>
 
 <!-- Star decorations -->
@@ -677,6 +784,9 @@
 <div class="star-deco tr">★</div>
 <div class="star-deco bl">★</div>
 <div class="star-deco br">★</div>
+
+<!-- Surprise Toast -->
+<div class="surprise-toast" id="surprise-toast">🎉 Surprise! Happy Birthday, my love! 🎂</div>
 
 <!-- Modal -->
 <div class="modal-overlay" id="modal">
@@ -693,10 +803,8 @@
 
 <!-- HERO -->
 <section class="hero">
-  <!-- CIRCLE PHOTO: replace the placeholder div with <img src="https://i.pinimg.com/736x/94/e7/02/94e702d3e485a3d878f3999547054f51.jpg" alt="My love"> inside .hero-avatar -->
   <div class="hero-avatar">
-    <img src="https://i.pinimg.com/736x/94/e7/02/94e702d3e485a3d878f3999547054f51.jpg" alt="My love">3
-    </div>
+    <img src="https://i.pinimg.com/736x/94/e7/02/94e702d3e485a3d878f3999547054f51.jpg" alt="My love">
   </div>
   <h1>
     <span class="italic pink">Happy Birthday</span><br>
@@ -728,107 +836,81 @@
       love of <span>♥</span> my life
     </div>
   </div>
-  <div class="quote-photo">🎂</div>
+
+  <!-- SURPRISE PHOTO -->
+  <div class="quote-photo" id="quotePhoto" onclick="revealPhoto()">
+    <img
+      src="./extra/photo_2026-04-22 14.27.17.jpeg"
+      alt="surprise photo"
+      id="quotePhotoImg"
+      class="blurred"
+    />
+    <!-- overlay shown while blurred -->
+    <div class="blur-overlay" id="blurOverlay">
+      <span class="click-emoji">🎀</span>
+      <span class="click-note">✨ Click me!</span>
+    </div>
+  </div>
 </div>
 
 <!-- JARS OF LOVE -->
 <section class="love-jars">
-
-    <h2 class="jars-title">Jars of Love 💌</h2>
-  
-    <div class="jar-container">
-  
-      <div class="love-jar"
-      onclick="showModal(
-        '💖',
-        'I Appreciate You',
-        'Just having you in my life makes everything better. You are genuinely special to me.'
-        )">
-        <div class="jar-lid"></div>
-        <div class="jar-glass">
-        </div>
-        <p>Baby</p>
-      </div>
-  
-      <div class="love-jar"
-      onclick="showModal(
-        '🌸',
-        'Your Kindness',
-        'I love how kind and gentle your heart is, even in the smallest things you do.'
-        )">
-        <div class="jar-lid"></div>
-        <div class="jar-glass">
-        </div>
-        <p>Love</p>
-      </div>
-
-  
-      <div class="love-jar"
-      onclick="showModal(
-        '😊',
-        'Your Smile',
-        'Your smile is my favorite thing. It makes everything feel lighter and happier.'
-        )">
-        <div class="jar-lid"></div>
-        <div class="jar-glass">
-        </div>
-        <p>You</p>
-      </div>
-  
+  <h2 class="jars-title">Jars of Love 💌</h2>
+  <div class="jar-container">
+    <div class="love-jar" onclick="showModal('💖','I Appreciate You','Just having you in my life makes everything better. You are genuinely special to me.')">
+      <div class="jar-lid"></div>
+      <div class="jar-glass"></div>
+      <p>Baby</p>
     </div>
-  </section>
+    <div class="love-jar" onclick="showModal('🌸','Your Kindness','I love how kind and gentle your heart is, even in the smallest things you do.')">
+      <div class="jar-lid"></div>
+      <div class="jar-glass"></div>
+      <p>Love</p>
+    </div>
+    <div class="love-jar" onclick="showModal('😊','Your Smile','Your smile is my favorite thing. It makes everything feel lighter and happier.')">
+      <div class="jar-lid"></div>
+      <div class="jar-glass"></div>
+      <p>You</p>
+    </div>
+  </div>
+</section>
 
 <!-- TWO-COL: PLAYLIST + POLAROIDS -->
 <div class="two-col">
-  <!-- PLAYLIST -->
   <div class="playlist-card">
     <div class="section-title"><span class="heart">♥</span> Our Playlist</div>
-
-    <div class="song-item"
-onclick="showModal('🎵','Perfect – Ed Sheeran',`I found a love for me... darling just dive right in, follow my lead. This is us. 💞`)">
-      <div>
-        <div class="song-name">PERFECT</div>
-        <div class="song-artist">by Ed Sheeran</div>
-      </div>
+    <div class="song-item" onclick="showModal('🎵','Perfect – Ed Sheeran',`I found a love for me... darling just dive right in, follow my lead. This is us. 💞`)">
+      <div><div class="song-name">PERFECT</div><div class="song-artist">by Ed Sheeran</div></div>
       <button class="play-btn">▶</button>
     </div>
-
     <div class="song-item" onclick="showModal('🎵','Lover – Taylor Swift','Every day is golden just because you\'re in it. Happy birthday, my lover. 🌻')">
-      <div>
-        <div class="song-name">LOVER</div>
-        <div class="song-artist">by Taylor Swift</div>
-      </div>
+      <div><div class="song-name">LOVER</div><div class="song-artist">by Taylor Swift</div></div>
       <button class="play-btn">▶</button>
     </div>
-
-    <div class="song-item"
-    onclick="showModal('🎵','All of Me – John Legend',`All of me loves all of you. Every single part. Happy birthday, beautiful. 🌹`)">
-      <div>
-        <div class="song-name">ALL OF ME</div>
-        <div class="song-artist">by John Legend</div>
-      </div>
+    <div class="song-item" onclick="showModal('🎵','All of Me – John Legend',`All of me loves all of you. Every single part. Happy birthday, beautiful. 🌹`)">
+      <div><div class="song-name">ALL OF ME</div><div class="song-artist">by John Legend</div></div>
       <button class="play-btn">▶</button>
     </div>
-
     <div class="song-item" onclick="showModal('🎵','Birthday – Katy Perry','Because you deserve the world on your special day! 🎉🎂 Happy Birthday!')">
-      <div>
-        <div class="song-name">BIRTHDAY</div>
-        <div class="song-artist">by Katy Perry</div>
-      </div>
+      <div><div class="song-name">BIRTHDAY</div><div class="song-artist">by Katy Perry</div></div>
       <button class="play-btn">▶</button>
     </div>
   </div>
 
-  <!-- POLAROIDS -->
   <div class="polaroid-card">
     <div class="polaroid-title">The love of my life</div>
     <div class="polaroid-handle">your name & mine, forever</div>
-    <div class="polaroid-stack">
-      <div class="polaroid-img">📸</div>
-      <div class="polaroid-img">🌸</div>
-    </div>
-    <div style="text-align:center;margin-top:8px;">
-      <a href="#" onclick="showModal('📸','Our Memories','Every photo with you is my favorite photo. You make even ordinary moments look extraordinary. 💕')" style="font-size:12px;color:var(--pink);text-decoration:none;">→ see more</a>
+    <div class="polaroid-slideshow">
+      <div class="polaroid-frame" id="polaroidFrame" onclick="nextPolaroid()">
+        <img src="./extra/p1.jpg" alt="memory" id="polaroidImg" />
+        <div class="polaroid-caption" id="polaroidCaption">tap to see more 🤍</div>
+      </div>
+      <div class="polaroid-dots" id="polaroidDots">
+        <span class="pdot active" onclick="goToPolaroid(0)"></span>
+        <span class="pdot" onclick="goToPolaroid(1)"></span>
+        <span class="pdot" onclick="goToPolaroid(2)"></span>
+        <span class="pdot" onclick="goToPolaroid(3)"></span>
+      </div>
     </div>
   </div>
 </div>
@@ -849,42 +931,27 @@ onclick="showModal('🎵','Perfect – Ed Sheeran',`I found a love for me... dar
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
-  <a href="#" onclick="showModal('🏠','Home','You are my home. 🏡')">Home ∨</a>
-  <a href="#" onclick="showModal('📷','Photos','Every photo with you is my favorite. 📷💕')">Photo ∨</a>
-  <a href="#" onclick="showModal('🖼️','Gallery','Our little gallery of beautiful moments. 🖼️')">Gallery ∨</a>
-  <a href="#" onclick="showModal('💌','Contact','You always have my heart. Just text me — always. 💌')">Contact ∨</a>
-  <a href="#" onclick="showModal('✨','More','There\'s always more love where that came from. ✨')">Other ∨</a>
-</nav>
-
 <!-- GALLERY -->
 <section class="gallery-section">
   <div class="gallery-header">
     <div class="section-title"><span class="heart">♥</span> Open when you're feeling...</div>
   </div>
   <div class="gallery-grid">
-    <div class="gallery-item"
-onclick="showModal('Open when you feel sad','Even on your hardest days, remember you are loved more than words can explain. 💕')">
-  <img src="https://i.pinimg.com/1200x/5c/ba/f5/5cbaf50a51fb25a8d06958ae2884c575.jpg">
-  <span class="gift-label">Open Me</span>
-</div>
-
-<div class="gallery-item"
-onclick="showModal('A Birthday Hug','If I could, I would hug you right now. Happy Birthday, my love. 🤍')">
-  <img src="https://i.pinimg.com/736x/bb/87/11/bb871188b8e795fbdbf8a3322af48a27.jpg">
-  <span class="gift-label">Open Me</span>
-</div>
-
-<div class="gallery-item"
-onclick="showModal('For When You Miss Me','Every memory we make is my favorite gift. 💌')">
-  <img src="https://i.pinimg.com/736x/c6/8d/2f/c68d2f4dba63e4fc21920a162aa2824e.jpg">
-  <span class="gift-label">Open Me</span>
-</div>
+    <div class="gallery-item" onclick="showModal('Open when you feel sad','Even on your hardest days, remember you are loved more than words can explain. 💕')">
+      <img src="https://i.pinimg.com/1200x/5c/ba/f5/5cbaf50a51fb25a8d06958ae2884c575.jpg">
+      <span class="gift-label">Open Me</span>
+    </div>
+    <div class="gallery-item" onclick="showModal('A Birthday Hug','If I could, I would hug you right now. Happy Birthday, my love. 🤍')">
+      <img src="https://i.pinimg.com/736x/bb/87/11/bb871188b8e795fbdbf8a3322af48a27.jpg">
+      <span class="gift-label">Open Me</span>
+    </div>
+    <div class="gallery-item" onclick="showModal('For When You Miss Me','Every memory we make is my favorite gift. 💌')">
+      <img src="https://i.pinimg.com/736x/c6/8d/2f/c68d2f4dba63e4fc21920a162aa2824e.jpg">
+      <span class="gift-label">Open Me</span>
+    </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <div class="footer">Made with so much love, just for you 💕</div>
 <div class="bottom-bar"></div>
 
@@ -903,6 +970,92 @@ onclick="showModal('For When You Miss Me','Every memory we make is my favorite g
   document.getElementById('modal').addEventListener('click', e => {
     if (e.target === e.currentTarget) closeModal();
   });
+
+  // ── HAPPY BIRTHDAY SONG ──
+  function playHappyBirthday() {
+    const audio = document.getElementById('bday-audio');
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.volume = 1;
+    audio.play().catch(() => {});
+  }
+
+  // ── POLAROID SLIDESHOW ──
+  const polaroidImages = [
+    { src: './extra/photo_2026-04-22 18.49.21.jpeg', caption: 'us 🤍' },
+    { src: './extra/photo_2026-04-22 18.49.24.jpeg', caption: 'forever 🌸' },
+    { src: './extra/photo_2026-04-22 18.49.25.jpeg', caption: 'my favorite 💕' },
+    { src: './extra/photo_2026-04-22 18.49.27.jpeg', caption: 'always you 🎀' },
+  ];
+  let currentPolaroid = 0;
+  let polaroidTimer = null;
+
+  function goToPolaroid(index) {
+    const img = document.getElementById('polaroidImg');
+    const caption = document.getElementById('polaroidCaption');
+    const dots = document.querySelectorAll('.pdot');
+
+    img.classList.add('fade-out');
+    setTimeout(() => {
+      currentPolaroid = index;
+      img.src = polaroidImages[currentPolaroid].src;
+      caption.textContent = polaroidImages[currentPolaroid].caption;
+      img.classList.remove('fade-out');
+      img.classList.add('fade-in');
+      dots.forEach((d, i) => d.classList.toggle('active', i === currentPolaroid));
+    }, 220);
+
+    // Reset auto-advance timer
+    clearInterval(polaroidTimer);
+    polaroidTimer = setInterval(advancePolaroid, 3000);
+  }
+
+  function nextPolaroid() {
+    goToPolaroid((currentPolaroid + 1) % polaroidImages.length);
+  }
+
+  function advancePolaroid() {
+    goToPolaroid((currentPolaroid + 1) % polaroidImages.length);
+  }
+
+  // Start auto-advance
+  polaroidTimer = setInterval(advancePolaroid, 3000);
+
+  // ── PHOTO REVEAL ──
+  let photoRevealed = false;
+
+  function revealPhoto() {
+    if (photoRevealed) return;
+    photoRevealed = true;
+
+    const img = document.getElementById('quotePhotoImg');
+    const overlay = document.getElementById('blurOverlay');
+    const toast = document.getElementById('surprise-toast');
+    const photoWrap = document.getElementById('quotePhoto');
+
+    // Remove blur
+    img.classList.remove('blurred');
+    img.classList.add('revealed');
+
+    // Hide overlay
+    overlay.classList.add('hidden');
+
+    // Remove pointer cursor once revealed
+    photoWrap.style.cursor = 'default';
+
+    // Play Happy Birthday
+    playHappyBirthday();
+
+    // Show toast
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 4000);
+
+    // Big confetti burst from center
+    spawnBurst(window.innerWidth / 2, window.innerHeight / 2, 55);
+    spawnBurst(window.innerWidth * 0.15, window.innerHeight * 0.4, 25);
+    spawnBurst(window.innerWidth * 0.85, window.innerHeight * 0.4, 25);
+    setTimeout(() => spawnBurst(window.innerWidth / 2, window.innerHeight * 0.3, 30), 300);
+  }
 
   // ── CONFETTI ──
   const canvas = document.getElementById('confetti-canvas');
@@ -959,14 +1112,14 @@ onclick="showModal('For When You Miss Me','Every memory we make is my favorite g
 
   animate();
 
-  // Initial big burst on load
+  // Initial burst on load
   setTimeout(() => {
     spawnBurst(window.innerWidth / 2, window.innerHeight / 2, 40);
     spawnBurst(window.innerWidth * 0.2, window.innerHeight * 0.3, 20);
     spawnBurst(window.innerWidth * 0.8, window.innerHeight * 0.3, 20);
   }, 400);
 
-  // Burst on click
+  // Burst on click (non-canvas)
   document.addEventListener('click', e => {
     if (e.target.id !== 'confetti-canvas') {
       spawnBurst(e.clientX, e.clientY, 14);
